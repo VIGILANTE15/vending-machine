@@ -1,0 +1,184 @@
+class VendingMachine:
+    def __init__(self):
+        # Inisialisasi produk dengan nama, harga, dan kuantitas
+        self.produk = {
+            '1': {'nama': 'Air Mineral', 'harga': 5000, 'stok': 10},
+            '2': {'nama': 'Minuman Ringan', 'harga': 10000, 'stok': 8},
+            '3': {'nama': 'Energy Bar', 'harga': 15000, 'stok': 5},
+            '4': {'nama': 'Keripik', 'harga': 12000, 'stok': 7},
+            '5': {'nama': 'Cokelat', 'harga': 8000, 'stok': 6}
+        }
+        self.saldo = 0
+        self.password_admin = "admin123"
+
+    def tampilkan_produk(self):
+        print("\nDaftar Produk:")
+        print("==============")
+        for kode, produk in self.produk.items():
+            print(f"{kode}. {produk['nama']} - Rp {produk['harga']} (Stok: {produk['stok']})")
+
+    def masukkan_uang(self):
+        try:
+            jumlah = int(input("\nMasukkan nominal uang (Rp): "))
+            if jumlah <= 0:
+                print("Masukkan nominal yang valid.")
+                return
+            self.saldo += jumlah
+            print(f"Saldo Anda sekarang: Rp {self.saldo}")
+        except ValueError:
+            print("Input tidak valid. Harap masukkan angka.")
+
+    def pilih_produk(self):
+        kode = input("\nMasukkan kode produk (atau '0' untuk batal): ")
+        
+        if kode == '0':
+            self.kembalikan_uang()
+            return
+        
+        if kode not in self.produk:
+            print("Kode produk tidak valid. Silakan coba lagi.")
+            return
+            
+        produk = self.produk[kode]
+        
+        if produk['stok'] <= 0:
+            print("Maaf, produk ini sedang habis.")
+            return
+            
+        if self.saldo < produk['harga']:
+            print(f"Saldo tidak cukup. Anda membutuhkan Rp {produk['harga'] - self.saldo} lagi.")
+            return
+            
+        self.saldo -= produk['harga']
+        produk['stok'] -= 1
+        
+        print(f"\nMengeluarkan {produk['nama']}...")
+        print(f"Sisa saldo: Rp {self.saldo}")
+        
+        if self.saldo > 0:
+            self.kembalikan_uang()
+
+    def kembalikan_uang(self):
+        if self.saldo > 0:
+            print(f"\nMengembalikan uang: Rp {self.saldo}")
+            self.saldo = 0
+
+    def restok_produk(self):
+        password = input("Masukkan password admin: ")
+        if password != self.password_admin:
+            print("Password salah. Akses ditolak.")
+            return
+        
+        print("\nStok Saat Ini:")
+        self.tampilkan_produk()
+        
+        kode = input("\nMasukkan kode produk yang akan di-restok: ")
+        if kode not in self.produk:
+            print("Kode produk tidak valid.")
+            return
+        
+        try:
+            jumlah = int(input("Masukkan jumlah yang akan ditambahkan: "))
+            if jumlah <= 0:
+                print("Jumlah harus positif.")
+                return
+                
+            self.produk[kode]['stok'] += jumlah
+            print(f"\nBerhasil restok {self.produk[kode]['nama']}. Stok baru: {self.produk[kode]['stok']}")
+        except ValueError:
+            print("Input tidak valid. Harap masukkan angka.")
+
+    def tambah_produk(self):
+        password = input("Masukkan password admin: ")
+        if password != self.password_admin:
+            print("Password salah. Akses ditolak.")
+            return
+        
+        print("\nTambah Produk Baru")
+        print("==================")
+        
+        kode_terdaftar = [int(k) for k in self.produk.keys() if k.isdigit()]
+        kode_baru = str(max(kode_terdaftar) + 1 if kode_terdaftar else '1')
+        
+        nama = input("Nama produk: ")
+        
+        try:
+            harga = int(input("Harga (Rp): "))
+            if harga <= 0:
+                print("Harga harus positif.")
+                return
+                
+            stok = int(input("Stok awal: "))
+            if stok < 0:
+                print("Stok tidak boleh negatif.")
+                return
+                
+            self.produk[kode_baru] = {
+                'nama': nama,
+                'harga': harga,
+                'stok': stok
+            }
+                                                                                                        
+            print(f"\nBerhasil menambahkan produk baru: {nama} (Kode: {kode_baru})")
+        except ValueError:
+            print("Input tidak valid. Harap masukkan angka untuk harga dan stok.")
+
+    def jalankan(self):
+        print("Selamat datang di Mesin Penjual Otomatis!")
+        print("========================================")
+        
+        while True:
+            self.tampilkan_produk()
+            
+            print("\nPilihan:")
+            print("1. Masukkan Uang")
+            print("2. Pilih Produk")
+            print("3. Kembalikan Uang")
+            print("4. Menu Admin")
+            print("5. Keluar")
+            
+            pilihan = input("Masukkan pilihan Anda: ")
+            
+            if pilihan == '1':
+                self.masukkan_uang()
+            elif pilihan == '2':
+                self.pilih_produk()
+            elif pilihan == '3':
+                self.kembalikan_uang()
+            elif pilihan == '4':
+                self.menu_admin()
+            elif pilihan == '5':
+                print("\nTerima kasih telah menggunakan mesin kami!")
+                break
+            else:
+                print("Pilihan tidak valid. Silakan coba lagi.")
+
+            input("\nTekan Enter untuk melanjutkan...")
+            print("\n" * 50)
+
+    def menu_admin(self):
+        while True:
+            print("\nMenu Admin")
+            print("==========")
+            print("1. Restok Produk")
+            print("2. Tambah Produk Baru")
+            print("3. Kembali ke Menu Utama")
+            
+            pilihan = input("Masukkan pilihan Anda: ")
+            
+            if pilihan == '1':
+                self.restok_produk()
+            elif pilihan == '2':
+                self.tambah_produk()
+            elif pilihan == '3':
+                break
+            else:
+                print("Pilihan tidak valid. Silakan coba lagi.")
+            
+            input("\nTekan Enter untuk melanjutkan...")
+
+
+# Jalankan mesin penjual otomatis
+if __name__ == "__main__":
+    vm = VendingMachine()
+    vm.jalankan()
