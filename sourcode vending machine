@@ -176,4 +176,4 @@ class VendingMachine:
 # Jalankan mesin penjual otomatis
 if __name__ == "__main__":
     vm = VendingMachine()
-    vm.jalankan()
+    vm.Main()
