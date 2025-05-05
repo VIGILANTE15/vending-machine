@@ -63,12 +63,7 @@ class VendingMachine:
             print(f"\nMengembalikan uang: Rp {self.saldo}")
             self.saldo = 0
 
-    def restok_produk(self):
-        password = input("Masukkan password admin: ")
-        if password != self.password_admin:
-            print("Password salah. Akses ditolak.")
-            return
-        
+    def restok_produk(self):        
         print("\nStok Saat Ini:")
         self.tampilkan_produk()
         
@@ -88,12 +83,7 @@ class VendingMachine:
         except ValueError:
             print("Input tidak valid. Harap masukkan angka.")
 
-    def tambah_produk(self):
-        password = input("Masukkan password admin: ")
-        if password != self.password_admin:
-            print("Password salah. Akses ditolak.")
-            return
-        
+    def tambah_produk(self):        
         print("\nTambah Produk Baru")
         print("==================")
         
@@ -123,7 +113,7 @@ class VendingMachine:
         except ValueError:
             print("Input tidak valid. Harap masukkan angka untuk harga dan stok.")
 
-    def jalankan(self):
+    def Main(self):
         print("Selamat datang di Mesin Penjual Otomatis!")
         print("========================================")
         
@@ -157,6 +147,11 @@ class VendingMachine:
             print("\n" * 50)
 
     def menu_admin(self):
+        password = input("Masukkan password admin: ")
+        if password != self.password_admin:
+            print("Password salah. Akses ditolak.")
+            return
+
         while True:
             print("\nMenu Admin")
             print("==========")
