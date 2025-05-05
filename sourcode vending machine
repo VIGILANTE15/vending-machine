@@ -31,9 +31,9 @@ class VendingMachine:
     def pilih_produk(self):
         kode = input("\nMasukkan kode produk (atau '0' untuk batal): ")
         
-        if kode == '0':
-            self.kembalikan_uang()
-            return
+        #if kode == '0':
+        #    self.kembalikan_uang()
+        #    return
         
         if kode not in self.produk:
             print("Kode produk tidak valid. Silakan coba lagi.")
@@ -55,8 +55,8 @@ class VendingMachine:
         print(f"\nMengeluarkan {produk['nama']}...")
         print(f"Sisa saldo: Rp {self.saldo}")
         
-        if self.saldo > 0:
-            self.kembalikan_uang()
+        #if self.saldo > 0:
+        #    self.kembalikan_uang()
 
     def kembalikan_uang(self):
         if self.saldo > 0:
@@ -131,7 +131,7 @@ class VendingMachine:
             self.tampilkan_produk()
             
             print("\nPilihan:")
-            print("1. Masukkan Uang")
+            print(f"1. Masukkan Uang (saldo: {self.saldo}")
             print("2. Pilih Produk")
             print("3. Kembalikan Uang")
             print("4. Menu Admin")
